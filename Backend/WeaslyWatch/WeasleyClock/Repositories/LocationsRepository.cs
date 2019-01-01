@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WeaslyWatch.Model.Data;
+using WeasleyClock.Model.Data;
 
-namespace WeaslyWatch.Repositories
+namespace WeasleyClock.Repositories
 {
     public class LocationsRepository
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WeaslyWatch.Model.Data
+namespace WeasleyClock.Model.Data
 {
     public class Location
     {

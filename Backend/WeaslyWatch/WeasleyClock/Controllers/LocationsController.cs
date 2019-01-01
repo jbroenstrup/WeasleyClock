@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WeaslyWatch.Model.Data;
+using WeasleyClock.Model.Data;
 
-namespace WeaslyWatch.Controllers
+namespace WeasleyClock.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
