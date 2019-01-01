@@ -14,7 +14,7 @@ namespace WeasleyClock.Repositories
 
         public Location GetCurrentLocation(string userName, double longitude, double lattitude)
         {
-
+            return new Location();
         }
     }
 }
