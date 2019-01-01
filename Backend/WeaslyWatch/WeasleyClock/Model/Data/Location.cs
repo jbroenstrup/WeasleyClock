@@ -15,5 +15,10 @@ namespace WeasleyClock.Model.Data
         public double SpeedMax { get; set; }
         public string LocationName { get; set; }
         public string UserName { get; set; }
+
+        public Location()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 }
