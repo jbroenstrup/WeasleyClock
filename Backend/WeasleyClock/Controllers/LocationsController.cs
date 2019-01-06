@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WeasleyClock.Model.Data;
 using WeasleyClock.Repositories;
+using WeasleyClock.Repositories.Interfaces;
 
 namespace WeasleyClock.Controllers
 {
@@ -11,11 +12,11 @@ namespace WeasleyClock.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        private readonly LocationsRepository _repo;
+        private readonly ILocationsRepository _repo;
 
-        public LocationsController()
+        public LocationsController(ILocationsRepository repo)
         {
-            _repo = new LocationsRepository();
+            _repo = repo;
         }
 
         // GET api/values

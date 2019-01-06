@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using WeasleyClock.Model;
 using WeasleyClock.Model.Data;
+using WeasleyClock.Repositories.Interfaces;
 
-namespace WeasleyClock.Repositories
+namespace WeasleyClock.Repositories.Implementations
 {
-    public class LocationsRepository
+    public class LocationsRepository : ILocationsRepository
     {
         public LocationsRepository()
         {
@@ -32,7 +33,7 @@ namespace WeasleyClock.Repositories
             return Math.Sqrt((Math.Pow(location.Latitude - lattitude, 2)) + (Math.Pow(location.Longitude - longitude, 2)));
         }
 
-        internal async Task RemoveLocation(Guid id)
+        public async Task RemoveLocation(Guid id)
         {
             using (var db = new LocationsContext())
             {
@@ -42,7 +43,7 @@ namespace WeasleyClock.Repositories
             }
         }
 
-        internal async Task<List<Location>> GetAll()
+        public async Task<List<Location>> GetAll()
         {
             using (var db = new LocationsContext())
             {
@@ -50,7 +51,7 @@ namespace WeasleyClock.Repositories
             }
         }
 
-        internal async Task AddLocation(Location location)
+        public async Task AddLocation(Location location)
         {
             using (var db = new LocationsContext())
             {
