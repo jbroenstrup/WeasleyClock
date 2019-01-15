@@ -11,6 +11,9 @@ namespace WeasleyClock.Repositories.Implementations
 {
     public class LocationsRepository : ILocationsRepository
     {
+        private const float _earthRadiusKm = 6371;
+        private const float _mPerKm = 1000.0f;
+
         public LocationsRepository()
         {
         }
@@ -21,16 +24,30 @@ namespace WeasleyClock.Repositories.Implementations
             {
                 var candidates = await db
                     .Locations
-                    .Where(l => l.UserName == userName && CalculateDistance(l, lattitude, longitude) < l.MaxDistance)
+                    .Where(l => l.UserName == userName && DistanceInKmBetweenEarthCoordinates(l.Latitude, l.Longitude, lattitude, longitude) < l.MaxDistance)
                     .ToListAsync();
 
                 return candidates.First();
             }
         }
 
-        private double CalculateDistance(Location location, double lattitude, double longitude)
+        private double DegreesToRadians(double degrees)
         {
-            return Math.Sqrt((Math.Pow(location.Latitude - lattitude, 2)) + (Math.Pow(location.Longitude - longitude, 2)));
+            return degrees * Math.PI / 180;
+        }
+
+        private double DistanceInKmBetweenEarthCoordinates(double lat1, double lon1, double lat2, double lon2)
+        {
+            var dLat = DegreesToRadians(lat2 - lat1);
+            var dLon = DegreesToRadians(lon2 - lon1);
+
+            lat1 = DegreesToRadians(lat1);
+            lat2 = DegreesToRadians(lat2);
+
+            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                    Math.Sin(dLon / 2) * Math.Sin(dLon / 2) * Math.Cos(lat1) * Math.Cos(lat2);
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return _earthRadiusKm * c * _mPerKm;
         }
 
         public async Task RemoveLocation(Guid id)
