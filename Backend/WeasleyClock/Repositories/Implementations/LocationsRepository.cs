@@ -6,49 +6,33 @@ using System.Threading.Tasks;
 using WeasleyClock.Model;
 using WeasleyClock.Model.Data;
 using WeasleyClock.Repositories.Interfaces;
+using WeasleyClock.Utilities;
 
 namespace WeasleyClock.Repositories.Implementations
 {
     public class LocationsRepository : ILocationsRepository
     {
-        private const float _earthRadiusKm = 6371;
-        private const float _mPerKm = 1000.0f;
-
         public LocationsRepository()
         {
         }
 
-        public async Task<Location> GetCurrentLocation(string userName, double lattitude, double longitude)
+        public async Task<Location> GetCurrentLocation(string userName, double latitude, double longitude)
         {
             using (var db = new LocationsContext())
             {
                 var candidates = await db
                     .Locations
-                    .Where(l => l.UserName == userName && DistanceInKmBetweenEarthCoordinates(l.Latitude, l.Longitude, lattitude, longitude) < l.MaxDistance)
+                    .Where(l => l.UserName == userName && 
+                           DistanceCalculator.DistanceInKmBetweenEarthCoordinates(l.Latitude, l.Longitude, latitude, longitude) < l.MaxDistance)
                     .ToListAsync();
 
-                return candidates.First();
+                if (candidates.Any())
+                    return candidates.First();
+                else
+                    return new Location { UserName = userName, Latitude = latitude, Longitude = longitude, LocationName = "Unknown" };
             }
         }
 
-        private double DegreesToRadians(double degrees)
-        {
-            return degrees * Math.PI / 180;
-        }
-
-        private double DistanceInKmBetweenEarthCoordinates(double lat1, double lon1, double lat2, double lon2)
-        {
-            var dLat = DegreesToRadians(lat2 - lat1);
-            var dLon = DegreesToRadians(lon2 - lon1);
-
-            lat1 = DegreesToRadians(lat1);
-            lat2 = DegreesToRadians(lat2);
-
-            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                    Math.Sin(dLon / 2) * Math.Sin(dLon / 2) * Math.Cos(lat1) * Math.Cos(lat2);
-            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            return _earthRadiusKm * c * _mPerKm;
-        }
 
         public async Task RemoveLocation(Guid id)
         {
