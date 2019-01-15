@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WeasleyClock.Model.Data;
-using WeasleyClock.Repositories;
 using WeasleyClock.Repositories.Interfaces;
 
 namespace WeasleyClock.Controllers
